@@ -1,0 +1,4 @@
+# Gemfile for chronos scripts
+source "http://rubygems.org"
+
+gem 'zk'
