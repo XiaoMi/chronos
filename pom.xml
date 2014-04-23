@@ -4,11 +4,16 @@
 
   <groupId>com.xiaomi.infra</groupId>
   <artifactId>chronos</artifactId>
-  <version>1.2.0-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>pom</packaging>
   <name>chronos</name>
   <description>Network service to provide globally strictly monotone increasing timestamp</description>
-  
+
+  <modules>
+    <module>./chronos-server</module>
+    <module>./chronos-client</module>
+  </modules>
+
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
@@ -25,11 +30,6 @@
     <name>Xiaomi Inc</name>
     <url>http://www.mi.com</url>
   </organization>
-
-  <modules>
-    <module>./chronos-server</module>
-    <module>./chronos-client</module>
-  </modules>
   
   <distributionManagement>
     <repository>

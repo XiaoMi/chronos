@@ -1,6 +1,5 @@
-<?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <!-- If you're going to deploy with thrift0.5.0 or other versions, follow these steps:
@@ -11,8 +10,9 @@
   <groupId>com.xiaomi.infra</groupId>
   <artifactId>chronos-client</artifactId>
   <version>1.2.0-thrift0.8.0-SNAPSHOT</version>
+  <packaging>jar</packaging>
   <name>chronos-client</name>
-  <description>The client to provide globally strictly monotone increasing timestamp</description>
+  <description>The client to get globally strictly monotone increasing timestamp</description>
   
   <parent>
     <groupId>com.xiaomi.infra</groupId>
@@ -51,7 +51,7 @@
     <dependency>
       <groupId>org.apache.zookeeper</groupId>
       <artifactId>zookeeper</artifactId>
-      <version>3.4.4-mdh1.0.0-SNAPSHOT</version>
+      <version>3.4.4</version>
     </dependency>
     
     <!-- For test -->
@@ -131,7 +131,7 @@
         </executions>
       </plugin>
 
-      <!-- Add generate thrift Java files -->
+      <!-- Add generate thrift Java files to class path -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>build-helper-maven-plugin</artifactId>
