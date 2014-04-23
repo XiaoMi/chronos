@@ -143,14 +143,14 @@ The ChronosClient will get the address of master ChronosServer in ZooKeeper. The
 
 * Performance Test
 
-| Client Thread | Client QPS | Latency(ms) | Failover Time(s) | Server QPS |
+| Client Thread | Average QPS | Average Latency(ms) | Average Failover Time(s) | Server QPS |
 |-------------|---------|------------------|---------------------|------------|
 | 1      | 10792.757    | 0.093            | 3.056               | 32378.271  |
 | 10     | 7919.679     | 0.127            | 3.053               | 237590.370 |
 | 20     | 6676.801     | 0.164            | 3.952               | 400788.060 |
 | 50     | 3954.026     | 0.255            | 4.044               | 593103.900 |
 | 100    | 1791.251     | 0.605            | 5.470               | 537375.300 |
-| 50(Optimum) | 3993.749   | 0.251            | 0.000               | 599062.350 |
+| 50(Optimum) | 3993.749 | 0.251           | 0.000               | 599062.350 |
 
 * Failover Test
 
