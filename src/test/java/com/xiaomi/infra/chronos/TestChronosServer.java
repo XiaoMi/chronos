@@ -51,7 +51,8 @@ public class TestChronosServer {
     chronosServer.getFailoverWatcher().close();
   }
 
-  public ChronosServer createChronosServer(HostPort hostPort) throws IOException, TTransportException, ChronosException {
+  public ChronosServer createChronosServer(HostPort hostPort) throws IOException,
+      TTransportException, ChronosException {
     Properties properties = new Properties();
     properties.setProperty(FailoverServer.SERVER_HOST, hostPort.getHost());
     properties.setProperty(FailoverServer.SERVER_PORT, String.valueOf(hostPort.getPort()));
@@ -86,7 +87,7 @@ public class TestChronosServer {
 
     chronosServer.stopThriftServer();
     assert true;
-    
+
     chronosServer.getFailoverWatcher().close();
   }
 

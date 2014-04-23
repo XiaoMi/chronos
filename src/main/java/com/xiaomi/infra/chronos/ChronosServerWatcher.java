@@ -22,7 +22,6 @@ public class ChronosServerWatcher extends FailoverWatcher {
   private static final Log LOG = LogFactory.getLog(ChronosServerWatcher.class);
 
   private final String persistentTimestampZnode;
-
   private boolean beenActiveMaster = false;
   private long persistentTimestamp;
 
@@ -138,10 +137,6 @@ public class ChronosServerWatcher extends FailoverWatcher {
     }
   }
 
-  public void setBeenActiveMaster(boolean beenActiveMaster) {
-    this.beenActiveMaster = beenActiveMaster;
-  }
-
   /**
    * Deal with the connection event.
    *
@@ -165,9 +160,13 @@ public class ChronosServerWatcher extends FailoverWatcher {
       break;
     }
   }
-  
+
   public String getPersistentTimestampZnode(){
     return persistentTimestampZnode;
+  }
+  
+  public void setBeenActiveMaster(boolean beenActiveMaster) {
+    this.beenActiveMaster = beenActiveMaster;
   }
   
 }

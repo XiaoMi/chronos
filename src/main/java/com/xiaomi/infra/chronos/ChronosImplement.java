@@ -23,6 +23,14 @@ public class ChronosImplement implements ChronosService.Iface {
   private long maxAssignedTimestamp;
   private boolean isAsyncSetPersistentTimestamp = false;
 
+  /**
+   * Construct ChronosImplement with properties and ChronosServerWatcher.
+   * 
+   * @param properties the properties of zkAdvanceTimestamp
+   * @param chronosServerWatcher the ZooKeeper client to set persistent timestamp
+   * @throws FatalChronosException when set a smaller timestamp in ZooKeeper
+   * @throws ChronosException when error to set value in ZooKeeper
+   */
   public ChronosImplement(Properties properties, ChronosServerWatcher chronosServerWatcher)
       throws FatalChronosException, ChronosException {
     this.chronosServerWatcher = chronosServerWatcher;
@@ -31,7 +39,7 @@ public class ChronosImplement implements ChronosService.Iface {
   }
 
   /**
-   * Assign required number of timestamps, client can use [timestamp, timestamp + range)
+   * Assign required number of timestamps, client can use [timestamp, timestamp + range).
    * 
    * @param range, the number of timestamps to assign
    * @return timestamp, the first available timestamp to client
@@ -52,7 +60,6 @@ public class ChronosImplement implements ChronosService.Iface {
       // for correctness, compare with persistent timestamp and set it if necessary
       if (maxAssignedTimestamp >= chronosServerWatcher.getCachedPersistentTimestamp()) {
 
-        // TODO: implement with wait/notify rather than sleep
         // wait for the result of asyn set
         sleepUntilAsyncSet();
 

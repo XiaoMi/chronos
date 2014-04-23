@@ -61,39 +61,45 @@ public class TestChronosWatcher {
 
   @Test
   public void testInitZnode() throws IOException, KeeperException {
-    ChronosServerWatcher chronosServerWatcher = createChronosWatcher(new HostPort("127.0.0.1", 10086));
+    ChronosServerWatcher chronosServerWatcher = createChronosWatcher(new HostPort("127.0.0.1",
+        10086));
 
-    assertTrue(ZooKeeperUtil.watchAndCheckExists(chronosServerWatcher, chronosServerWatcher.getBaseZnode()));
-    assertTrue(ZooKeeperUtil.watchAndCheckExists(chronosServerWatcher, chronosServerWatcher.getBackupServersZnode()));
-    assertTrue(ZooKeeperUtil.watchAndCheckExists(chronosServerWatcher, chronosServerWatcher.getPersistentTimestampZnode()));
-    
+    assertTrue(ZooKeeperUtil.watchAndCheckExists(chronosServerWatcher,
+      chronosServerWatcher.getBaseZnode()));
+    assertTrue(ZooKeeperUtil.watchAndCheckExists(chronosServerWatcher,
+      chronosServerWatcher.getBackupServersZnode()));
+    assertTrue(ZooKeeperUtil.watchAndCheckExists(chronosServerWatcher,
+      chronosServerWatcher.getPersistentTimestampZnode()));
+
     chronosServerWatcher.close();
   }
 
   @Test
   public void testSetPersistentTimestamp() throws IOException, FatalChronosException,
       ChronosException, KeeperException {
-    ChronosServerWatcher chronosServerWatcher = createChronosWatcher(new HostPort("127.0.0.1", 10086));
+    ChronosServerWatcher chronosServerWatcher = createChronosWatcher(new HostPort("127.0.0.1",
+        10086));
 
     long expectTimestamp = RandomUtils.nextLong();
     chronosServerWatcher.setPersistentTimestamp(expectTimestamp);
     long actualTimestamp = ZooKeeperUtil.bytesToLong(ZooKeeperUtil.getDataAndWatch(
       chronosServerWatcher, chronosServerWatcher.getPersistentTimestampZnode()));
     assertTrue(actualTimestamp == expectTimestamp);
-    
+
     chronosServerWatcher.close();
   }
 
   @Test
   public void testGetPersistentTimestamp() throws IOException, ChronosException, KeeperException {
-    ChronosServerWatcher chronosServerWatcher = createChronosWatcher(new HostPort("127.0.0.1", 10086));
+    ChronosServerWatcher chronosServerWatcher = createChronosWatcher(new HostPort("127.0.0.1",
+        10086));
 
     assertTrue(chronosServerWatcher.getPersistentTimestamp() == 0);
 
     long expectTimestamp = RandomUtils.nextLong();
     chronosServerWatcher.setPersistentTimestamp(expectTimestamp);
     assertTrue(chronosServerWatcher.getPersistentTimestamp() == expectTimestamp);
-    
+
     chronosServerWatcher.close();
   }
 

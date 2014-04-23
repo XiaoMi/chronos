@@ -30,7 +30,7 @@ public class TestFailoverServer {
 
   public class TestableFailoverServer extends FailoverServer {
     private final Log LOG = LogFactory.getLog(TestableFailoverServer.class);
-    
+
     private boolean isRunning = false;
 
     public TestableFailoverServer(FailoverWatcher failoverWatcher) {
@@ -62,7 +62,7 @@ public class TestFailoverServer {
   public static void tearDownAfterClass() throws Exception {
     TEST_UTIL.shutdownMiniZKCluster();
   }
-  
+
   @Before
   public void resetZooKeeper() throws IOException, KeeperException {
     TestableFailoverServer failoverServer = createFailoverServer(new HostPort("127.0.0.1", 10086));
@@ -76,7 +76,8 @@ public class TestFailoverServer {
     properties.setProperty(FailoverServer.SERVER_HOST, hostPort.getHost());
     properties.setProperty(FailoverServer.SERVER_PORT, String.valueOf(hostPort.getPort()));
     properties.setProperty(FailoverServer.BASE_ZNODE, "/test-failover");
-    properties.setProperty(FailoverServer.ZK_QUORUM, ZKConfig.getZKQuorumServersString(TEST_UTIL.getConfiguration()));
+    properties.setProperty(FailoverServer.ZK_QUORUM,
+      ZKConfig.getZKQuorumServersString(TEST_UTIL.getConfiguration()));
     properties.setProperty(FailoverServer.SESSION_TIMEOUT, String.valueOf(3000));
 
     FailoverWatcher failoverWatcher = new FailoverWatcher(properties);
@@ -108,13 +109,14 @@ public class TestFailoverServer {
 
     // stop server1 and server2 can run as active server
     thread1.interrupt();
-    ZooKeeperUtil.deleteNode(server1.getFailoverWatcher(), server1.getFailoverWatcher().getMasterZnode());
+    ZooKeeperUtil.deleteNode(server1.getFailoverWatcher(), server1.getFailoverWatcher()
+        .getMasterZnode());
 
     Thread.sleep(500); // wait for server2 to become active server
     assertFalse(server1.isRunning());
     assertTrue(server2.isRunning());
     thread2.interrupt();
-    
+
     server1.getFailoverWatcher().close();
     server2.getFailoverWatcher().close();
   }

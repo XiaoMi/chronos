@@ -46,15 +46,14 @@ public class TestChronosImplement {
   @Before
   public void resetZooKeeper() throws IOException, KeeperException, FatalChronosException,
       ChronosException {
-    ChronosImplement chronosImplement = createChronosImplement(new HostPort("127.0.0.1",
-        10086));
+    ChronosImplement chronosImplement = createChronosImplement(new HostPort("127.0.0.1", 10086));
     ZooKeeperUtil.deleteNodeRecursively(chronosImplement.getChronosServerWatcher(),
       chronosImplement.getChronosServerWatcher().getBaseZnode());
     chronosImplement.getChronosServerWatcher().close();
   }
 
-  private ChronosImplement createChronosImplement(HostPort hostPort)
-      throws FatalChronosException, ChronosException, IOException {
+  private ChronosImplement createChronosImplement(HostPort hostPort) throws FatalChronosException,
+      ChronosException, IOException {
     Properties properties = new Properties();
     properties.setProperty(FailoverServer.SERVER_HOST, hostPort.getHost());
     properties.setProperty(FailoverServer.SERVER_PORT, String.valueOf(hostPort.getPort()));
@@ -71,14 +70,13 @@ public class TestChronosImplement {
   @Test
   public void testGetTimestamp() throws FatalChronosException, ChronosException, IOException,
       TException {
-    ChronosImplement chronosImplement = createChronosImplement(new HostPort("127.0.0.1",
-        10086));
+    ChronosImplement chronosImplement = createChronosImplement(new HostPort("127.0.0.1", 10086));
 
     chronosImplement.initTimestamp();
     long firstTimestamp = chronosImplement.getTimestamp();
     long secondTimestamp = chronosImplement.getTimestamp();
     Assert.assertTrue(firstTimestamp < secondTimestamp);
-    
+
     chronosImplement.getChronosServerWatcher().close();
   }
 

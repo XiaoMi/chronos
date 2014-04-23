@@ -62,8 +62,9 @@ public class TestFailoverWatcher {
     FailoverWatcher failoverWatcher = createFailoverWatcher(new HostPort("127.0.0.1", 10086));
 
     assertTrue(ZooKeeperUtil.watchAndCheckExists(failoverWatcher, failoverWatcher.getBaseZnode()));
-    assertTrue(ZooKeeperUtil.watchAndCheckExists(failoverWatcher, failoverWatcher.getBackupServersZnode()));
-    
+    assertTrue(ZooKeeperUtil.watchAndCheckExists(failoverWatcher,
+      failoverWatcher.getBackupServersZnode()));
+
     failoverWatcher.close();
   }
 
@@ -120,7 +121,7 @@ public class TestFailoverWatcher {
     String activeServer2 = new String(ZooKeeperUtil.getDataAndWatch(failoverWatcher1,
       failoverWatcher1.masterZnode));
     assertTrue(activeServer2.equals(hostPort1.getHostPort()));
-    
+
     failoverWatcher1.close();
     failoverWatcher2.close();
   }
@@ -179,7 +180,7 @@ public class TestFailoverWatcher {
     } else {
       thread3.interrupt();
     }
-    
+
     failoverWatcher1.close();
     failoverWatcher2.close();
   }
@@ -208,7 +209,7 @@ public class TestFailoverWatcher {
       failoverWatcher2, failoverWatcher2.backupServersZnode);
     assertTrue(masterZnodeData.equals(failoverWatcher2.getHostPort().getHostPort()));
     assertTrue(backupMasterList.size() == 0);
-    
+
     failoverWatcher1.close();
     failoverWatcher2.close();
   }

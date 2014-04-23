@@ -8,7 +8,7 @@ public class FatalChronosException extends ChronosException {
   public FatalChronosException(String message) {
     super(message);
   }
-  
+
   public FatalChronosException(String message, Throwable cause) {
     super(message, cause);
   }

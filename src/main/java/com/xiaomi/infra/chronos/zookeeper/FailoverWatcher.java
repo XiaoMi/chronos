@@ -89,7 +89,7 @@ public class FailoverWatcher implements Watcher {
   /**
    * Connect with ZooKeeper with retries.
    *
-   * @throws IOException when error to construct ZooKeeper object after retrying.
+   * @throws IOException when error to construct ZooKeeper object after retrying
    */
   protected void connectZooKeeper() throws IOException {
     LOG.info("Connecting ZooKeeper " + zkQuorum);
@@ -124,7 +124,7 @@ public class FailoverWatcher implements Watcher {
   /**
    * Override this mothod to deal with events for leader election.
    *
-   * @param event the ZooKeeper event.
+   * @param event the ZooKeeper event
    */
   @Override
   public void process(WatchedEvent event) {
@@ -162,7 +162,7 @@ public class FailoverWatcher implements Watcher {
   /**
    * Deal with connection event, exit current process if auth fails or session expires.
    *
-   * @param event the ZooKeeper event.
+   * @param event the ZooKeeper event
    */
   protected void processConnection(WatchedEvent event) {
     switch (event.getState()) {
@@ -262,7 +262,7 @@ public class FailoverWatcher implements Watcher {
   /**
    * Implement the logic of server to wait to become active master.
    *
-   * @return false if error to wait to become active master.
+   * @return false if error to wait to become active master
    */
   public boolean blockUntilActive() {
     while (true) {
