@@ -10,7 +10,7 @@ Chronos-client是chronos服务的客户端。使用chronos-client可以快速获
     <dependency>
       <groupId>com.xiaomi.infra</groupId>
       <artifactId>chronos-client</artifactId>
-      <version>1.1.0-thrift0.8.0</version>
+      <version>1.2.0-thrift0.8.0</version>
     </dependency>
     ```
 
@@ -20,7 +20,7 @@ Chronos-client是chronos服务的客户端。使用chronos-client可以快速获
     <dependency>
       <groupId>com.xiaomi.infra</groupId>
       <artifactId>chronos-client</artifactId>
-      <version>1.1.0-thrift0.5.0</version>
+      <version>1.2.0-thrift0.5.0</version>
     </dependency>
     ```
 
@@ -49,7 +49,7 @@ Chronos-client提供了`getTimestamp()`和`getTimestamps(int)`两个接口，客
 # Chronos-client
 
 ## Introduction
-Chronos-client is the client of chronos service. With chronos-client, you can get a **globally restrict monotonic increasing timestamp** easily. It also handles failover problem. Once the master ChronosServer fails, this client can reconnect with the new master server through ZooKeeper and keep on requesting.
+Chronos-client is the client of chronos service. With chronos-client, you can get a **globally strictly monotone increasing timestamp** easily. It also handles failover problem. Once the master ChronosServer fails, this client can reconnect with the new master server through ZooKeeper and keep on requesting.
 
 ## Maven Dependency
 * If you're already using thrift-0.8.0, add this in your pom.xml.
@@ -58,7 +58,7 @@ Chronos-client is the client of chronos service. With chronos-client, you can ge
     <dependency>
       <groupId>com.xiaomi.infra</groupId>
       <artifactId>chronos-client</artifactId>
-      <version>1.0.0-thrift0.8.0</version>
+      <version>1.2.0-thrift0.8.0</version>
     </dependency>
     ```
 
@@ -68,12 +68,12 @@ Chronos-client is the client of chronos service. With chronos-client, you can ge
     <dependency>
       <groupId>com.xiaomi.infra</groupId>
       <artifactId>chronos-client</artifactId>
-      <version>1.0.0-thrift0.5.0</version>
+      <version>1.2.0-thrift0.5.0</version>
     </dependency>
     ```
 
 ## Usage
-Chronos-client provides two API, `getTimestamp()` and `getTimestamps(int)`. Client can request one or many timestamps for each RPC request. The allocated timestamp is persistent in server(actually in ZooKeeper), and we can guarantee that all the timestamps are globally strict monotonic increasing.
+Chronos-client provides two API, `getTimestamp()` and `getTimestamps(int)`. Client can request one or many timestamps for each RPC request. The allocated timestamp is persistent in server(actually in ZooKeeper), and we can guarantee that all the timestamps are globally strictly monotone increasing.
 
     import com.xiaomi.infra.chronos.client.ChronosClient;
     

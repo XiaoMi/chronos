@@ -20,32 +20,32 @@ ChronosClient启动时，通过访问ZooKeeper获得当前的主ChronosServer地
 
 ### Chronos服务端
 
-1. 进入chronos项目根目录，通过`mvn clean package -DskipTests`编译源码。
+1. 进入chronos-server目录，通过`mvn clean package -DskipTests`编译源码。
 2. 进入target里面的conf目录，编辑chronos.conf，填写依赖的ZooKeeper配置。
 3. 进入target里面的bin目录，执行`sh ./chronos.sh`既可运行ChronosServer。
 
 ### Chronos客户端
 
-1. 客户端需要在pom.xml添加chronos-client的依赖(**请使用对应的Thrift版本**)。
+1. 进入chronos-client目录，通过`mvn clean package -DskipTests`编译源码。
+2. 客户端在pom.xml添加chronos-client的依赖(**请使用对应的Thrift版本**)。
 
      ```
      <dependency>
        <groupId>com.xiaomi.infra</groupId>
        <artifactId>chronos-client</artifactId>
-       <version>1.1.0-thrift0.5.0</version>
+       <version>1.2.0-thrift0.5.0</version>
      </dependency>
      ```
      
-2. 创建ChronosClient对象，如`new ChronosClient("127.0.0.1:2181", "default-cluster")`。
-3. 发送RPC请求，如`chronosClient.getTimestamp()`或`chronosClient.getTimestamps(10)`。
+3. 创建ChronosClient对象，如`new ChronosClient("127.0.0.1:2181", "default-cluster")`。
+4. 发送RPC请求，如`chronosClient.getTimestamp()`或`chronosClient.getTimestamps(10)`。
 
 ### 快速体验
 
 1. 参考[ZooKeeper文档](http://zookeeper.apache.org/doc/trunk/zookeeperStarted.html)，编译ZooKeeper并运行在127.0.0.1:2181上。
-2. 获得chronos源代码，执行`mvn clean packge -DskipTests`编译。
-3. 进入target里的bin目录，执行`sh ./chronos.sh`运行ChronosServer。
-4. 获得chronos-client源代码，执行`mvn clean packge -DskipTests`编译(需要安装Thrift)。
-5. 执行`mvn exec:java -Dexec.mainClass="com.xiaomi.infra.chronos.client.ChronosClient" -Dexec.args="127.0.0.1:2181 default-cluster"`。
+2. 获得chronos源代码，执行`mvn clean packge -DskipTests`编译(需要安装Thrift)。
+3. 进入chronos-server的bin目录，执行`sh ./chronos.sh`运行ChronosServer。
+4. 进入chronos-client目录，执行`mvn exec:java -Dexec.mainClass="com.xiaomi.infra.chronos.client.ChronosClient" -Dexec.args="127.0.0.1:2181 default-cluster"`。
 
 ## 场景
 
@@ -101,32 +101,32 @@ The ChronosClient will get the address of master ChronosServer in ZooKeeper. The
 
 ### Chronos-server
 
-1. Enter the directory of chronos, compile through `mvn clean package -DskipTests`.
+1. Enter the directory of chronos-server, compile through `mvn clean package -DskipTests`.
 2. Enter the directory of conf, edit chronos.conf and fill in the ZooKeeper you're using.
 3. Enter the directory of bin, execute `sh ./chronos.sh` to monitor the running status.
 
 ### Chronos-client
 
-1. Add the dependency in pom.xml(**with the same version of Thrift**).
+1. Enter the directory of chronos-client, compile through `mvn clean package -DskipTests`.
+2. Add the dependency in pom.xml(**with the same version of Thrift**).
 
      ```
      <dependency>
        <groupId>com.xiaomi.infra</groupId>
        <artifactId>chronos-client</artifactId>
-       <version>1.1.0-thrift0.5.0</version>
+       <version>1.2.0-thrift0.5.0</version>
      </dependency>
      ```
 
-2. Construct the chronos client object, like `new ChronosClient("127.0.0.1:2181", "default-cluster")`.
-3. Send RPC request through client, like `chronosClient.getTimestamp()` or `chronosClient.getTimestamps(10)`.
+3. Construct the chronos client object, like `new ChronosClient("127.0.0.1:2181", "default-cluster")`.
+4. Send RPC request through client, like `chronosClient.getTimestamp()` or `chronosClient.getTimestamps(10)`.
 
 ### Quick Use
 
 1. Refer [ZooKeeper tutorial](http://zookeeper.apache.org/doc/trunk/zookeeperStarted.html), compile ZooKeeper and run on 127.0.0.1:2181.
-2. Get chronos source code, compile through `mvn clean packge -DskipTests`.
-3. Enter the directory of bin, execute `sh ./chronos.sh` to run ChronosServer.
-4. Get chronos-client source code, compile through `mvn clean packge -DskipTests`(Thrift required).
-5. Run `mvn exec:java -Dexec.mainClass="com.xiaomi.infra.chronos.client.ChronosClient" -Dexec.args="127.0.0.1:2181 default-cluster"`.
+2. Get source code of chronos, compile through `mvn clean packge -DskipTests`(Thrift required).
+3. Enter the directory of chronos-server, execute `sh ./chronos.sh` to run ChronosServer.
+4. Enter the directory of chronos-client, run `mvn exec:java -Dexec.mainClass="com.xiaomi.infra.chronos.client.ChronosClient" -Dexec.args="127.0.0.1:2181 default-cluster"`.
 
 ## Scenario
 
