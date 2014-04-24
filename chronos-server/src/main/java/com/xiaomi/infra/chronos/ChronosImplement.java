@@ -21,7 +21,7 @@ public class ChronosImplement implements ChronosService.Iface {
   private final ChronosServerWatcher chronosServerWatcher;
   private final long zkAdvanceTimestamp;
   private long maxAssignedTimestamp;
-  private boolean isAsyncSetPersistentTimestamp = false;
+  private volatile boolean isAsyncSetPersistentTimestamp = false;
 
   /**
    * Construct ChronosImplement with properties and ChronosServerWatcher.
