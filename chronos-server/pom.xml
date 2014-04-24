@@ -33,7 +33,7 @@
     <dependency>
       <groupId>org.apache.zookeeper</groupId>
       <artifactId>zookeeper</artifactId>
-      <version>3.4.4-mdh1.0.0-SNAPSHOT</version>
+      <version>3.4.4</version>
     </dependency>
 
     <!-- For test -->
