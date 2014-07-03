@@ -75,6 +75,12 @@ public class ChronosClient {
   public long getTimestamp() throws IOException {
     return chronosClientWatcher.getTimestamp();
   }
+  
+  public void close() throws IOException {
+    if (this.chronosClientWatcher != null) {
+      this.chronosClientWatcher.close();
+    }
+  }
 
   /**
    * The command-line tool to use ChronosClient to get a timestamp.
@@ -82,17 +88,20 @@ public class ChronosClient {
    * 
    * @param argv first argument is ZooKeeper quorum string
    */
-  public static void main(String[] argv) {
+  public static void main(String[] argv) throws IOException {
     if (argv.length != 2) {
       System.err.println("Wrong parameters, exit immediately");
       return;
     }
     
+    ChronosClient chronosClient = null;
     try {
-      ChronosClient chronosClient = new ChronosClient(argv[0], argv[1]);
+      chronosClient = new ChronosClient(argv[0], argv[1]);
       System.out.println("Get timestamp " + chronosClient.getTimestamp());
     } catch (IOException e) {
       System.err.println("Error to connect with ZooKeeper or ChronosServer, check the configuration");
+    } finally {
+      chronosClient.close();
     }
   }
 
