@@ -43,7 +43,7 @@ ChronosClient启动时，通过访问ZooKeeper获得当前的主ChronosServer地
 ### 快速体验
 
 1. 参考[ZooKeeper文档](http://zookeeper.apache.org/doc/trunk/zookeeperStarted.html)，编译ZooKeeper并运行在127.0.0.1:2181上。
-2. 获得chronos源代码，执行`mvn clean packge -DskipTests`编译(需要安装Thrift)。
+2. 获得chronos源代码，执行`mvn clean package -DskipTests`编译(需要安装Thrift)。
 3. 进入chronos-server的bin目录，执行`sh ./chronos.sh`运行ChronosServer。
 4. 进入chronos-client目录，执行`mvn exec:java -Dexec.mainClass="com.xiaomi.infra.chronos.client.ChronosClient" -Dexec.args="127.0.0.1:2181 default-cluster"`。
 
@@ -124,7 +124,7 @@ The ChronosClient will get the address of master ChronosServer in ZooKeeper. The
 ### Quick Use
 
 1. Refer [ZooKeeper tutorial](http://zookeeper.apache.org/doc/trunk/zookeeperStarted.html), compile ZooKeeper and run on 127.0.0.1:2181.
-2. Get source code of chronos, compile through `mvn clean packge -DskipTests`(Thrift required).
+2. Get source code of chronos, compile through `mvn clean package -DskipTests`(Thrift required).
 3. Enter the directory of chronos-server, execute `sh ./chronos.sh` to run ChronosServer.
 4. Enter the directory of chronos-client, run `mvn exec:java -Dexec.mainClass="com.xiaomi.infra.chronos.client.ChronosClient" -Dexec.args="127.0.0.1:2181 default-cluster"`.
 
