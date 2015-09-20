@@ -1,6 +1,8 @@
 package com.xiaomi.infra.chronos;
 
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,6 +24,7 @@ public class ChronosImplement implements ChronosService.Iface {
   private final long zkAdvanceTimestamp;
   private long maxAssignedTimestamp;
   private volatile boolean isAsyncSetPersistentTimestamp = false;
+  private final ExecutorService executorService;
 
   /**
    * Construct ChronosImplement with properties and ChronosServerWatcher.
@@ -36,6 +39,7 @@ public class ChronosImplement implements ChronosService.Iface {
     this.chronosServerWatcher = chronosServerWatcher;
     this.zkAdvanceTimestamp = Long.parseLong(properties.getProperty(
       ChronosServer.ZK_ADVANCE_TIMESTAMP, "1000"));
+    executorService = Executors.newCachedThreadPool();
   }
 
   /**
@@ -142,18 +146,19 @@ public class ChronosImplement implements ChronosService.Iface {
    * @param newPersistentTimestamp the new timestamp to set
    */
   public synchronized void asyncSetPersistentTimestamp(final long newPersistentTimestamp) {
-    new Thread() {
-      @Override
-      public void run() {
-        try {
-          chronosServerWatcher.setPersistentTimestamp(newPersistentTimestamp);
-          isAsyncSetPersistentTimestamp = false;
-        } catch (Exception e) {
-          LOG.fatal("Error to set persistent timestamp, exit immediately");
-          System.exit(0);
-        }
-      }
-    }.start();
+	  executorService.execute(new Runnable() {
+		
+		@Override
+		public void run() {
+	        try {
+	          chronosServerWatcher.setPersistentTimestamp(newPersistentTimestamp);
+	          isAsyncSetPersistentTimestamp = false;
+	        } catch (Exception e) {
+	          LOG.fatal("Error to set persistent timestamp, exit immediately");
+	          System.exit(0);
+	        }
+		}
+	});
   }
 
   public ChronosServerWatcher getChronosServerWatcher() {
