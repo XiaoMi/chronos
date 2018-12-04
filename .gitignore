@@ -4,3 +4,9 @@ pom.xml.releaseBackup
 pom.xml.next
 release.properties
 .idea/
+.project
+.classpath
+.settings
+**/target
+**/.settings
+**/src/generated

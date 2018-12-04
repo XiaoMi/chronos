@@ -6,10 +6,7 @@
        1. Change the version of this project.
        2. Depend libthrift with specified version.
        3. Change the <thriftExecutable> of maven-thrift-plugin. -->
-  
-  <groupId>com.xiaomi.infra</groupId>
   <artifactId>chronos-client</artifactId>
-  <version>1.2.0-thrift0.8.0-SNAPSHOT</version>
   <packaging>jar</packaging>
   <name>chronos-client</name>
   <description>The client to get globally strictly monotone increasing timestamp</description>
@@ -17,90 +14,30 @@
   <parent>
     <groupId>com.xiaomi.infra</groupId>
     <artifactId>chronos</artifactId>
-    <version>1.0.0</version>
+    <version>2.0.0-SNAPSHOT</version>
     <relativePath>../</relativePath>
   </parent>
 
   <dependencies>
-
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>1.7.5</version>
     </dependency>
-    
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>1.1.1</version>
-    </dependency>
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.10</version>
-      <scope>test</scope>
-    </dependency>
-
     <dependency>
       <groupId>org.apache.thrift</groupId>
       <artifactId>libthrift</artifactId>
-      <version>0.8.0</version>
     </dependency>
-
     <dependency>
       <groupId>org.apache.zookeeper</groupId>
       <artifactId>zookeeper</artifactId>
-      <version>3.4.4</version>
     </dependency>
-    
-    <!-- For test -->
-    <dependency>
-      <groupId>com.xiaomi.infra</groupId>
-      <artifactId>chronos-server</artifactId>
-      <version>1.2.0-SNAPSHOT</version>
-      <scope>test</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>org.apache.thrift</groupId>
-          <artifactId>libthrift</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.hbase</groupId>
-      <artifactId>hbase</artifactId>
-      <version>0.94.3</version>
-      <classifier>tests</classifier>
-      <scope>test</scope>
-    </dependency> 
-    
-    <dependency>
-      <groupId>org.apache.hbase</groupId>
-      <artifactId>hbase</artifactId>
-      <version>0.94.3</version>
-      <scope>test</scope>
-    </dependency>  
-
-    <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-core</artifactId>
-      <version>0.20.2</version>
-      <scope>test</scope>
-    </dependency>        
-    
   </dependencies>
-  
+
   <build>
     <plugins>   
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
-        </configuration>
       </plugin>
       
       <!-- Generate thrift Java files -->
@@ -120,13 +57,6 @@
               <goal>compile</goal>
             </goals>
           </execution>
-          <execution>
-            <id>thrift-test-sources</id>
-            <phase>generate-test-sources</phase>
-            <goals>
-              <goal>testCompile</goal>
-            </goals>
-          </execution>
         </executions>
       </plugin>
 
@@ -139,17 +69,6 @@
             <id>add-source</id>
             <goals>
               <goal>add-source</goal>
-            </goals>
-            <configuration>
-              <sources>
-                <source>./generated/java</source>
-              </sources>
-            </configuration>
-          </execution>
-          <execution>
-            <id>add-test-source</id>
-            <goals>
-              <goal>add-test-source</goal>
             </goals>
             <configuration>
               <sources>
