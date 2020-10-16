@@ -31,6 +31,7 @@ public class ChronosClientWatcher implements Watcher {
   private final String masterZnode;
   private final int sessionTimeout;
   private final int connectRetryTimes;
+  private final int socketTimeout;
   
   private ZooKeeper zooKeeper;
   private TTransport transport;
@@ -49,6 +50,7 @@ public class ChronosClientWatcher implements Watcher {
     masterZnode = baseZnode + "/master";
     sessionTimeout = Integer.parseInt(properties.getProperty(ChronosClient.SESSION_TIMEOUT, "5000"));
     connectRetryTimes = Integer.parseInt(properties.getProperty(ChronosClient.CONNECT_RETRY_TIMES, "10"));
+    socketTimeout = Integer.parseInt(properties.getProperty(ChronosClient.SOCKET_TIMEOUT, "3000"));
     
     connectZooKeeper();
     connectChronosServer();
@@ -103,7 +105,8 @@ public class ChronosClientWatcher implements Watcher {
       String hostPort = new String(hostPortBytes); // e.g. 127.0.0.0_2181
       LOG.info("Find the active chronos server in " + hostPort);
       try {
-        transport = new TSocket(hostPort.split("_")[0], Integer.parseInt(hostPort.split("_")[1]));
+        transport = new TSocket(hostPort.split("_")[0], Integer.parseInt(hostPort.split("_")[1]),
+            socketTimeout);
         transport.open();
         protocol = new TBinaryProtocol(transport);
         client = new ChronosService.Client(protocol);

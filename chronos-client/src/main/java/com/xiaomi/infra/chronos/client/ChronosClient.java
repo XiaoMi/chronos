@@ -18,7 +18,8 @@ public class ChronosClient {
   public static final String CLUSTER_NAME = "clusterName";
   public static final String SESSION_TIMEOUT = "sessionTimeout";
   public static final String CONNECT_RETRY_TIMES = "connectRetryTimes";
-  
+  public static final String SOCKET_TIMEOUT = "socketTimeout";
+
   private ChronosClientWatcher chronosClientWatcher;
 
   /**
@@ -52,6 +53,7 @@ public class ChronosClient {
     properties.setProperty(CLUSTER_NAME, clusterName);
     properties.setProperty(SESSION_TIMEOUT, String.valueOf(30000));
     properties.setProperty(CONNECT_RETRY_TIMES, String.valueOf(10));
+    properties.setProperty(SOCKET_TIMEOUT, String.valueOf(3000));
     this.chronosClientWatcher = new ChronosClientWatcher(properties);
   }
 
