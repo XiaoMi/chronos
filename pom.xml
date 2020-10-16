@@ -40,7 +40,7 @@
     <thrift.version>0.9.2</thrift.version>
     <zookeeper.version>3.4.13</zookeeper.version>
     <curator.version>2.12.0</curator.version>
-    <junit.version>4.12</junit.version>
+    <junit.version>4.13.1</junit.version>
     <mockito.version>1.10.19</mockito.version>
   </properties>
 
