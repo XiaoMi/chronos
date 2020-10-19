@@ -33,6 +33,8 @@ public class ChronosServer extends FailoverServer {
   public static final String CLUSTER_NAME = "clusterName";
   public static final String MAX_THREAD = "maxThread";
   public static final String ZK_ADVANCE_TIMESTAMP = "zkAdvanceTimestamp";
+  public static final String SOCKET_TIMEOUT = "socketTimeout";
+  public static final String MESSAGE_LENGTH_LIMIT = "messageLengthLimit";
 
   private final Properties properties;
   private final ChronosServerWatcher chronosServerWatcher;
@@ -94,8 +96,14 @@ public class ChronosServer extends FailoverServer {
       String.valueOf(Integer.MAX_VALUE)));
     String serverHost = properties.getProperty(FailoverServer.SERVER_HOST);
     int serverPort = Integer.parseInt(properties.getProperty(FailoverServer.SERVER_PORT));
-    TServerSocket serverTransport = new TServerSocket(new InetSocketAddress(serverHost, serverPort));
-    Factory proFactory = new TBinaryProtocol.Factory();
+    int socketTimeout = Integer
+        .parseInt(properties.getProperty(SOCKET_TIMEOUT, String.valueOf(3000L)));
+    TServerSocket serverTransport =
+        new TServerSocket(new InetSocketAddress(serverHost, serverPort), socketTimeout);
+    // Default message length limit is 10KB
+    int messageLengthLimit =
+        Integer.parseInt(properties.getProperty(MESSAGE_LENGTH_LIMIT, String.valueOf(10240)));
+    Factory proFactory = new TBinaryProtocol.Factory(true, false, messageLengthLimit, -1L);
 
     chronosImplement = new ChronosImplement(properties, chronosServerWatcher);
 
