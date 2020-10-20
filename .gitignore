@@ -10,3 +10,6 @@ release.properties
 **/target
 **/.settings
 **/src/generated
+/chronos-server/chronos-server.iml
+/chronos.iml
+/chronos-client/chronos-client.iml
