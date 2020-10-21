@@ -80,11 +80,6 @@
         <groupId>org.apache.curator</groupId>
         <artifactId>curator-test</artifactId>
         <version>${curator.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>org.apache.curator</groupId>
-        <artifactId>curator-test</artifactId>
-        <version>${curator.version}</version>
         <exclusions>
           <exclusion>
             <groupId>org.apache.zookeeper</groupId>
