@@ -46,7 +46,7 @@
         <artifactId>maven-thrift-plugin</artifactId>
         <version>0.1.11</version>
         <configuration>
-          <thriftExecutable>/usr/local/opt/thrift@0.13/bin/thrift</thriftExecutable>
+          <thriftExecutable>thrift</thriftExecutable>
           <outputDirectory>./src/generated/java/</outputDirectory>
           <generator>java</generator>
         </configuration>
