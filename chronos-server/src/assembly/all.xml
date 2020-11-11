@@ -15,4 +15,12 @@
       </includes>
     </fileSet>
   </fileSets>
+
+  <dependencySets>
+    <dependencySet>
+      <excludes>
+        <exclude>org.apache.thrift:libthrift</exclude>
+      </excludes>
+    </dependencySet>
+  </dependencySets>
 </assembly>
