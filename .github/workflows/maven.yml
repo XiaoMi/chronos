@@ -26,6 +26,6 @@ jobs:
         sudo apt-get install automake bison flex g++ git libboost-all-dev libevent-dev libtool make pkg-config libssl1.0-dev
         wget https://archive.apache.org/dist/thrift/0.13.0/thrift-0.13.0.tar.gz
         tar xfz thrift-0.13.0.tar.gz
-        cd thrift-0.13.0 && sed -i 's/google/\/\/google/g' lib/java/build.gradle && sed -i 's/http/https/g' lib/java/gradle.properties && ./configure --with-java --without-csharp --without-erlang --without-cpp --without-c_glib --without-python --without-php --without-ruby --without-go && sudo make install
+        cd thrift-0.13.0 && sed -i 's/google/\/\/google/g' lib/java/build.gradle && sed -i 's/http:/https:/g' lib/java/gradle.properties && ./configure --with-java --without-csharp --without-erlang --without-cpp --without-c_glib --without-python --without-php --without-ruby --without-go && sudo make install
     - name: Build with Maven
       run: mvn -B package --file pom.xml
