@@ -13,3 +13,5 @@ release.properties
 chronos-server/chronos-server.iml
 chronos.iml
 chronos-client/chronos-client.iml
+chronos-server/dependency-reduced-pom.xml
+chronos-client/dependency-reduced-pom.xml
