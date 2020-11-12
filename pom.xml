@@ -37,7 +37,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
     <slf4j.version>1.7.25</slf4j.version>
-    <thrift.version>0.13.0</thrift.version>
+    <thrift.version>0.12.0</thrift.version>
     <zookeeper.version>3.4.14</zookeeper.version>
     <curator.version>2.12.0</curator.version>
     <junit.version>4.13.1</junit.version>
