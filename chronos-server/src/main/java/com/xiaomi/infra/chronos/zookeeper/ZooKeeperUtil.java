@@ -75,7 +75,7 @@ public class ZooKeeperUtil {
       failoverWatcher.getZooKeeper().delete(node, version);
       return true;
     } catch (KeeperException.BadVersionException bve) {
-      LOG.info("Bad version exception when delete node '{}'", node, bve);
+      LOG.debug("Bad version exception when delete node '{}'", node, bve);
       return false;
     } catch (InterruptedException ie) {
       LOG.debug("Received InterruptedException, doing nothing here", ie);
@@ -110,7 +110,7 @@ public class ZooKeeperUtil {
       // List the children without watching
       children = failoverWatcher.getZooKeeper().getChildren(znode, null);
     } catch (KeeperException.NoNodeException nne) {
-      LOG.info("child '{}' does not exist, we ignore the result:", znode, nne);
+      LOG.debug("child '{}' does not exist, we ignore the result:", znode, nne);
     } catch (InterruptedException ie) {
       LOG.debug("Receive InterruptedException, doing nothing here", ie);
     }
