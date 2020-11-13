@@ -26,6 +26,16 @@ jobs:
         sudo apt-get install automake bison flex g++ git libboost-all-dev libevent-dev libtool make pkg-config libssl1.0-dev
         wget https://archive.apache.org/dist/thrift/0.13.0/thrift-0.13.0.tar.gz
         tar xfz thrift-0.13.0.tar.gz
+
+        #The following one line is to comment the use of google repo in gradle build, because address of google repo is unaccessable
+        #sed -i 's/google/\/\/google/g' lib/java/build.gradle
+
+        #Maven central repo should use https not http
+        #sed -i 's/http:/https:/g' lib/java/gradle.properties
+
+        #Disable .net assembly or one mistake will happen
+        #sed -i 's/SignAssembly>true/SignAssembly>false/g'
+
         cd thrift-0.13.0 && sed -i 's/google/\/\/google/g' lib/java/build.gradle && sed -i 's/http:/https:/g' lib/java/gradle.properties && sed -i 's/SignAssembly>true/SignAssembly>false/g' lib/netstd/Thrift/Thrift.csproj && ./configure --with-java --without-csharp --without-erlang --without-cpp --without-c_glib --without-python --without-php --without-ruby --without-go --without-netcore --without-js --without-netstd --without-nodejs --without-swift && sudo make install
     - name: Build with Maven
       run: mvn -B package --file pom.xml
