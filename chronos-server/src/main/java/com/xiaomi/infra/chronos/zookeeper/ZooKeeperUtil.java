@@ -15,6 +15,8 @@ import org.apache.zookeeper.data.Id;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.Nullable;
+
 /**
  * Most code is from HBase ZKUtil and ZooKeeperWatcher is replaced with FailoverWatcher.
  */
@@ -25,7 +27,7 @@ public class ZooKeeperUtil {
       throws KeeperException {
     try {
       Stat s = failoverWatcher.getZooKeeper().exists(znode, failoverWatcher);
-      boolean exists = s != null ? true : false;
+      boolean exists = s != null;
       if (LOG.isDebugEnabled()) {
         if (exists) {
           LOG.debug("Set watcher on existing znode " + znode);
@@ -73,6 +75,7 @@ public class ZooKeeperUtil {
       failoverWatcher.getZooKeeper().delete(node, version);
       return true;
     } catch (KeeperException.BadVersionException bve) {
+      LOG.debug("Bad version exception when delete node '{}'", node, bve);
       return false;
     } catch (InterruptedException ie) {
       LOG.debug("Received InterruptedException, doing nothing here", ie);
@@ -85,7 +88,9 @@ public class ZooKeeperUtil {
     try {
       List<String> children = ZooKeeperUtil.listChildrenNoWatch(failoverWatcher, node);
       // the node is already deleted, so we just finish
-      if (children == null) return;
+      if (children == null) {
+        return;
+      }
 
       if(!children.isEmpty()) {
         for(String child : children) {
@@ -105,10 +110,11 @@ public class ZooKeeperUtil {
       // List the children without watching
       children = failoverWatcher.getZooKeeper().getChildren(znode, null);
     } catch (KeeperException.NoNodeException nne) {
-      return null;
+      LOG.debug("child '{}' does not exist, we ignore the result:", znode, nne);
     } catch (InterruptedException ie) {
       LOG.debug("Receive InterruptedException, doing nothing here", ie);
     }
+
     return children;
   }
 
@@ -116,24 +122,19 @@ public class ZooKeeperUtil {
       throws KeeperException {
     try {
       failoverWatcher.getZooKeeper().delete(node, -1);
-    } catch (KeeperException.NoNodeException nne) {
+    } catch (KeeperException.NoNodeException ignored) {
+      //ignore
     } catch (InterruptedException ie) {
       LOG.debug("Received InterruptedException, doing nothing here", ie);
     }
   }
 
-  public static byte[] getDataAndWatch(FailoverWatcher failoverWatcher, String znode)
-      throws KeeperException {
-    return getDataInternal(failoverWatcher, znode, null, true);
+  public static byte[] getDataAndWatch(FailoverWatcher failoverWatcher, String znode) {
+    return getDataInternal(failoverWatcher, znode, null);
   }
 
-  public static byte[] getDataAndWatch(FailoverWatcher failoverWatcher, String znode, Stat stat)
-      throws KeeperException {
-    return getDataInternal(failoverWatcher, znode, stat, true);
-  }
-
-  private static byte[] getDataInternal(FailoverWatcher failoverWatcher, String znode, Stat stat,
-      boolean watcherSet) throws KeeperException {
+  @Nullable
+  private static byte[] getDataInternal(FailoverWatcher failoverWatcher, String znode, Stat stat) {
     try {
       byte[] data = failoverWatcher.getZooKeeper().getData(znode, failoverWatcher, stat);
       if (LOG.isDebugEnabled()) {
@@ -147,11 +148,7 @@ public class ZooKeeperUtil {
             + "because node does not exist (not an error)");
       }
       return null;
-    } catch (KeeperException e) {
-      LOG.warn("Unable to get data of znode " + znode, e);
-      LOG.warn("Received unexpected KeeperException, re-throwing exception");
-      return null;
-    } catch (InterruptedException e) {
+    } catch (KeeperException | InterruptedException e) {
       LOG.warn("Unable to get data of znode " + znode, e);
       LOG.warn("Received unexpected KeeperException, re-throwing exception");
       return null;
@@ -166,31 +163,32 @@ public class ZooKeeperUtil {
       if (zk.exists(znode, false) == null) {
         zk.create(znode, new byte[0], createAcl(failoverWatcher, znode), CreateMode.PERSISTENT);
       }
-    } catch (KeeperException.NodeExistsException nee) {
+    } catch (KeeperException.NodeExistsException ignore) {
+      //we just ignore result if the node already exist
       LOG.info("Znode " + znode + " already exist");
     } catch (KeeperException.NoAuthException nee) {
       try {
         if (null == failoverWatcher.getZooKeeper().exists(znode, false)) {
           // If we failed to create the file and it does not already exist.
-          throw (nee);
+          throw nee;
         }
       } catch (InterruptedException ie) {
         LOG.debug("Received InterruptedException, re-throw the exception", ie);
-        throw (ie);
+        throw ie;
       }
     } catch (InterruptedException ie) {
       LOG.debug("Received InterruptedException, re-throw the exception", ie);
-      throw (ie);
+      throw ie;
     }
   }
 
   public static void setData(FailoverWatcher failoverWatcher, String znode, byte[] data)
-      throws KeeperException, KeeperException.NoNodeException {
+      throws KeeperException {
     setData(failoverWatcher, znode, data, -1);
   }
 
   public static boolean setData(FailoverWatcher failoverWatcher, String znode, byte[] data,
-      int expectedVersion) throws KeeperException, KeeperException.NoNodeException {
+      int expectedVersion) throws KeeperException {
     try {
       return failoverWatcher.getZooKeeper().setData(znode, data, expectedVersion) != null;
     } catch (InterruptedException e) {
@@ -200,10 +198,9 @@ public class ZooKeeperUtil {
   }
 
   public static List<String> listChildrenAndWatchForNewChildren(FailoverWatcher failoverWatcher,
-      String znode) throws KeeperException {
+      String znode) {
     try {
-      List<String> children = failoverWatcher.getZooKeeper().getChildren(znode, failoverWatcher);
-      return children;
+      return failoverWatcher.getZooKeeper().getChildren(znode, failoverWatcher);
     } catch (KeeperException.NoNodeException ke) {
       if (LOG.isDebugEnabled()) {
         LOG.debug("Unable to list children of znode " + znode + " "
@@ -228,18 +225,18 @@ public class ZooKeeperUtil {
    * @return the acls
    */
   public static ArrayList<ACL> createAcl(FailoverWatcher failoverWatcher, String znode) {
-    if (znode.equals("/chronos")) {
+    if ("/chronos".equals(znode)) {
       return Ids.OPEN_ACL_UNSAFE;
     }
     
     if (failoverWatcher.isZkSecure()) {
-      ArrayList<ACL> acls = new ArrayList<ACL>();
+      ArrayList<ACL> acls = new ArrayList<>();
       acls.add(new ACL(ZooDefs.Perms.READ, ZooDefs.Ids.ANYONE_ID_UNSAFE));
       acls.add(new ACL(ZooDefs.Perms.ALL, new Id("sasl", failoverWatcher.getZkAdmin())));
       return acls;
-    } else {
-      return Ids.OPEN_ACL_UNSAFE;
     }
+
+    return Ids.OPEN_ACL_UNSAFE;
   }
 
   /**
@@ -249,7 +246,7 @@ public class ZooKeeperUtil {
    * @return the byte array of this value
    */
   public static byte[] longToBytes(long val) {
-    byte[] b = new byte[8];
+    byte[] b = new byte[Byte.SIZE];
     for (int i = 7; i > 0; i--) {
       b[i] = (byte) val;
       val >>>= 8;
@@ -266,7 +263,7 @@ public class ZooKeeperUtil {
    */
   public static long bytesToLong(byte[] bytes) {
     long l = 0;
-    for (int i = 0; i < 0 + 8; i++) {
+    for (int i = 0; i < Byte.SIZE; i++) {
       l <<= 8;
       l ^= bytes[i] & 0xFF;
     }

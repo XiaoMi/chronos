@@ -1,10 +1,8 @@
 package com.xiaomi.infra.chronos.client;
 
 import java.io.IOException;
+import java.util.Objects;
 import java.util.Properties;
-
-import com.xiaomi.infra.chronos.client.ChronosClient;
-import com.xiaomi.infra.chronos.client.ChronosClientWatcher;
 
 /**
  * The client of ChronosServer provides an interface to get precise auto-increasing timestamp. It
@@ -78,7 +76,7 @@ public class ChronosClient {
     return chronosClientWatcher.getTimestamp();
   }
   
-  public void close() throws IOException {
+  public void close() {
     if (this.chronosClientWatcher != null) {
       this.chronosClientWatcher.close();
     }
@@ -102,8 +100,11 @@ public class ChronosClient {
       System.out.println("Get timestamp " + chronosClient.getTimestamp());
     } catch (IOException e) {
       System.err.println("Error to connect with ZooKeeper or ChronosServer, check the configuration");
+      throw e;
     } finally {
-      chronosClient.close();
+      if (Objects.nonNull(chronosClient)) {
+        chronosClient.close();
+      }
     }
   }
 

@@ -2,6 +2,7 @@ package com.xiaomi.infra.chronos;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Objects;
 import java.util.Properties;
 
 import org.apache.commons.logging.Log;
@@ -72,16 +73,17 @@ public class ChronosServerWatcher extends FailoverWatcher {
   public long getPersistentTimestamp() throws ChronosException {
     byte[] persistentTimesampBytes = null;
     for (int i = 0; i <= connectRetryTimes; ++i) {
-      try {
         persistentTimesampBytes = ZooKeeperUtil.getDataAndWatch(this, persistentTimestampZnode);
-        break;
-      } catch (KeeperException e) {
+
+        if (Objects.nonNull(persistentTimesampBytes)) {
+          break;
+        }
+
         if (i == connectRetryTimes) {
           throw new ChronosException(
-              "Can't get persistent timestamp from ZooKeeper after retrying", e);
+              "Can't get persistent timestamp from ZooKeeper after retrying");
         }
         LOG.info("Exception to get persistent timestamp from ZooKeeper, retry " + (i + 1) + " times");
-      }
     }
 
     if (Arrays.equals(persistentTimesampBytes, new byte[0])) {
@@ -145,8 +147,7 @@ public class ChronosServerWatcher extends FailoverWatcher {
   @Override
   protected void processConnection(WatchedEvent event) {
     super.processConnection(event);
-    switch (event.getState()) {
-    case Disconnected:
+    if (event.getState() == Event.KeeperState.Disconnected) {
       if (beenActiveMaster) {
         LOG.fatal(hostPort.getHostPort()
             + " disconnected from ZooKeeper, stop serving and exit immediately");
@@ -155,9 +156,6 @@ public class ChronosServerWatcher extends FailoverWatcher {
         LOG.warn(hostPort.getHostPort()
             + " disconnected from ZooKeeper, wait to sync and try to become active master");
       }
-      break;
-    default:
-      break;
     }
   }
 

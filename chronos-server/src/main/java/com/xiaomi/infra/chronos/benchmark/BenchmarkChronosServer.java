@@ -101,7 +101,7 @@ public class BenchmarkChronosServer {
         }
         previousTimestamp = currentTimestamp;
 
-        if (isFailover == true) { // calculate failover time
+        if (isFailover) { // calculate failover time
           double failoverTime = (System.currentTimeMillis() - failoverStartTime) / 1000.0;
           System.out.println("After " + failoverStartTimeString + ", the total failover time is "
               + failoverTime + " seconds");
@@ -110,7 +110,7 @@ public class BenchmarkChronosServer {
       } catch (IOException e) {
         LOG.error("Exception to get timestamp");
 
-        if (isFailover == false) {
+        if (!isFailover) {
           failoverStartTime = System.currentTimeMillis();
           failoverStartTimeString = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(
               failoverStartTime));
