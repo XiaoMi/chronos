@@ -111,7 +111,7 @@ public class ChronosClientWatcher implements Watcher {
         protocol = new TBinaryProtocol(transport);
         client = new ChronosService.Client(protocol);
       } catch (TException e) {
-        new IOException("Exception to connect chronos server in " + hostPort);
+        throw new IOException("Exception to connect chronos server in " + hostPort);
       }
     } else {
       throw new IOException("The data of " + masterZnode + " is null");
@@ -185,29 +185,17 @@ public class ChronosClientWatcher implements Watcher {
           + event.getState() + ", " + "path=" + event.getPath());
     }
 
-    switch (event.getType()) {
-    case None: {
-      switch (event.getState()) {
-      case SyncConnected: {
+    if (event.getType() == Event.EventType.None && event.getState() == Event.KeeperState.SyncConnected) {
+      try {
+        waitToInitZooKeeper(2000); // init zookeeper in another thread, wait for a while
+      } catch (Exception e) {
+        LOG.error("Error to init ZooKeeper object after sleeping 2000 ms, reconnect ZooKeeper");
         try {
-          waitToInitZooKeeper(2000); // init zookeeper in another thread, wait for a while
-        } catch (Exception e) {
-          LOG.error("Error to init ZooKeeper object after sleeping 2000 ms, reconnect ZooKeeper");
-          try {
-            reconnectZooKeeper();
-          } catch (Exception e1) {
-            LOG.error("Error to reconnect with ZooKeeper", e1);
-          }
-        } 
-        break;
+          reconnectZooKeeper();
+        } catch (Exception e1) {
+          LOG.error("Error to reconnect with ZooKeeper", e1);
+        }
       }
-      default:
-        break;
-      }
-      break;
-    }
-    default:
-      break;
     }
   }
   

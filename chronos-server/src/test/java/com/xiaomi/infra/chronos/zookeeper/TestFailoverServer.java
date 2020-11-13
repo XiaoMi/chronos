@@ -28,6 +28,7 @@ public class TestFailoverServer {
       super(failoverWatcher);
     }
 
+    @Override
     public void doAsActiveServer() {
       isRunning = true;
       try {
