@@ -83,7 +83,7 @@ ChronosClient启动时，通过访问ZooKeeper获得当前的主ChronosServer地
 
 ## Introduction
 
-Chronos, known as ["time" in Ancient Geek](http://en.wikipedia.org/wiki/Chronos), is the **high-availability**, **high-performance** service to provide **globally strictly monotone increasing timestamp**. 
+Chronos, known as ["time" in Ancient Greek](http://en.wikipedia.org/wiki/Chronos), is the **high-availability**, **high-performance** service to provide **globally strictly monotone increasing timestamp**. 
 
 Chronos uses standby architecture so that when the master server is down, any backup server could notice and take over the service. We use [Thrift](http://thrift.apache.org/) as RPC server, which could handle 600,000 QPS for server and 60,000 for client(with local server). All the timestamps are allocated by one master server so we can make sure they're unique and monotone increasing. It relies on ZooKeeper to store persistent data. Even if the master sever fails, backup servers could keep on allocating increasing timestamp as well.
 
