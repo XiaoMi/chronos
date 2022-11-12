@@ -130,7 +130,7 @@ The ChronosClient will get the address of master ChronosServer in ZooKeeper. The
 
 ## Scenario
 
-* Need globally strictly monotone increasing timestamp to implement global transation, like [Percolator](http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/36726.pdf).
+* Need globally strictly monotone increasing timestamp to implement global transactions, like [Percolator](http://static.googleusercontent.com/media/research.google.com/en//pubs/archive/36726.pdf).
 * Need globally unique values. Unlike [snowflake](https://github.com/twitter/snowflake) which relies on NTP, chronos has more restricted constraint and handles failover by nature.
 
 ## Tools
